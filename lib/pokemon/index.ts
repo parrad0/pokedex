@@ -71,10 +71,10 @@ export const fetchPokemon = async (pokemonName: string) => {
 
 export const fetchPokemonTeam = async ({ types = "Fire,Ghost", limit = 40 }: { types: string, limit: number }) => {
   try {
-    // Array para almacenar los Pokémon filtrados por tipo
+    const delayTime = Math.random() * (4000 - 2000) + 1000;
+    await new Promise(resolve => setTimeout(resolve, delayTime));
     let filteredPokemons: any = [];
 
-    // Obtener Pokémon de cada tipo
     if (types.length > 0) {
       const typesArray = types.split(',');
       console.log("typesArray", typesArray);
@@ -89,24 +89,20 @@ export const fetchPokemonTeam = async ({ types = "Fire,Ghost", limit = 40 }: { t
       }
     }
 
-    // Eliminar duplicados
     filteredPokemons = Array.from(new Map(filteredPokemons.map((pokemon: { name: any; }) => [pokemon.name, pokemon])).values());
 
-    // Seleccionar aleatoriamente los Pokémon hasta el límite especificado
     if (limit < filteredPokemons.length) {
       filteredPokemons = filteredPokemons.sort(() => 0.5 - Math.random()).slice(0, limit);
     }
 
-    // Obtener detalles de cada Pokémon seleccionado
     const pokemonDetailsPromises = filteredPokemons.map((pokemon: { url: RequestInfo; }) => fetch(pokemon.url));
     const pokemonDetailsResponses = await Promise.all(pokemonDetailsPromises);
     const pokemonDetails = await Promise.all(pokemonDetailsResponses.map(res => res.json()));
 
-    // Extraer URL de la imagen frontal por defecto de cada Pokémon
     const pokemonWithImages = pokemonDetails.map(pokemon => ({
       name: pokemon.name,
       image: pokemon.sprites.front_default,
-      type: types // Agregado para identificar el tipo en el resultado, opcional
+      type: types
     }));
     console.log("pokemonWithImages", pokemonWithImages);
     return pokemonWithImages;
