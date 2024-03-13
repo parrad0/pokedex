@@ -1,3 +1,4 @@
+import { GridCardLoading } from "@/components/card/cardSkeleton";
 import TeamGenerator from "@/components/team/TeamGenerator";
 import { Metadata, Viewport } from "next";
 import { Suspense } from "react";
@@ -28,8 +29,8 @@ export default async function Page({
             <div className="flex flex-col items-start  mt-4 sm:text-5xl sm:mt-20 justify-start">
                 <p className="font-sans text-gray-700 text-sm">Team Created with AI</p>
             </div>
-            <Suspense fallback={<p>Loading</p>}>
-                <TeamGenerator types={[searchParams.types]} members={3} />
+            <Suspense fallback={<GridCardLoading />}>
+                <TeamGenerator types={searchParams.types} members={Number(searchParams.members)} />
             </Suspense>
         </section>
     );

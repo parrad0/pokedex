@@ -1,7 +1,7 @@
 import { fetchPokemonTeam } from "@/lib/pokemon";
 import PokeCard from "../card/pokeCard";
 
-const TeamGenerator = async ({ types, members }: { types: string[], members: number }) => {
+const TeamGenerator = async ({ types, members }: { types: string, members: number }) => {
     console.log('Types:', types);
     console.log('Members:', members);
     const pokemons = await fetchPokemonTeam({ types: types, limit: members })

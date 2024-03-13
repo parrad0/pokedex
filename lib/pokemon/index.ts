@@ -1,3 +1,5 @@
+'use server'
+
 import { RequestInfo } from "undici-types";
 
 export const fetchPokemonWithImages = async (limit = 40) => {
@@ -67,14 +69,16 @@ export const fetchPokemon = async (pokemonName: string) => {
 }
 
 
-export const fetchPokemonTeam = async ({ types = [], limit = 40 }: { types: string[], limit: number }) => {
+export const fetchPokemonTeam = async ({ types = "Fire,Ghost", limit = 40 }: { types: string, limit: number }) => {
   try {
     // Array para almacenar los Pokémon filtrados por tipo
     let filteredPokemons: any = [];
 
     // Obtener Pokémon de cada tipo
     if (types.length > 0) {
-      for (const type of types) {
+      const typesArray = types.split(',');
+      console.log("typesArray", typesArray);
+      for (const type of typesArray) {
         const url = `https://pokeapi.co/api/v2/type/${type.toLowerCase()}`;
         const response = await fetch(url);
         if (!response.ok) throw new Error(`No se pudo obtener los datos para el tipo ${type}`);

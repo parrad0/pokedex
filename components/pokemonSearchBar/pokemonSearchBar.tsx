@@ -42,22 +42,32 @@ const SearchButton = ({ href }: any) => {
 
 
 const TeamBuildingForm = () => {
-    const [selectedValue, setSelectedValue] = useState("1");
+    const [selectedValue, setSelectedValue] = useState([]);
     const [selectedMembers, setSelectedMembers] = useState("1");
 
     const handleSelectMembers = (event: any) => {
         setSelectedMembers(event);
     };
 
-    const handleSelectChange = (event: any) => {
-        setSelectedValue(event);
+    const handleSelectChange = (value: any) => {
+        setSelectedValue((prevSelectedMembers: any) => {
+            if (prevSelectedMembers.includes(value)) {
+                // Si el valor ya está seleccionado, lo quitamos
+                return prevSelectedMembers.filter((member: any) => member !== value);
+            } else {
+                // Si el valor no está seleccionado, lo agregamos
+                return [...prevSelectedMembers, value];
+            }
+        });
     };
 
     return (
         <div className="w-full gap-4 flex items-center justify-center">
-            <Select onValueChange={handleSelectChange} value={selectedValue}>
+            <Select onValueChange={handleSelectChange} value={selectedValue.join(",")}>
                 <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Days" />
+                    <SelectValue placeholder="types">
+                        {selectedValue.join(', ')}
+                    </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
